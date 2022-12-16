@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import Goal, Grid, MiniGridEnv, MissionSpace
+from gym_minigrid.minigrid_env import Goal, Grid, MiniGridEnv, MissionSpace
 
 
 class EmptyEnv(MiniGridEnv):
@@ -40,4 +40,7 @@ class EmptyEnv(MiniGridEnv):
         else:
             self.place_agent()
 
+        # TODO: check whether we need to define self.mission
+        #       self.mission = self.mission_space.sample() is in MiniGridEnv.__init__()
         self.mission = "get to the green goal square"
+

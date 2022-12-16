@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import Door, Goal, Grid, Key, MiniGridEnv, MissionSpace
+from gym_minigrid.minigrid_env import Door, Goal, Grid, Key, MiniGridEnv, MissionSpace
 
 
 class DoorKeyEnv(MiniGridEnv):

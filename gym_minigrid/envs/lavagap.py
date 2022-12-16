@@ -1,6 +1,6 @@
 import numpy as np
 
-from gym_minigrid.minigrid import Goal, Grid, Lava, MiniGridEnv, MissionSpace
+from gym_minigrid.minigrid_env import Goal, Grid, Lava, MiniGridEnv, MissionSpace
 
 
 class LavaGapEnv(MiniGridEnv):

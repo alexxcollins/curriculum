@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import Door, Grid, MiniGridEnv, MissionSpace
+from gym_minigrid.minigrid_env import Door, Grid, MiniGridEnv, MissionSpace
 
 
 class RedBlueDoorEnv(MiniGridEnv):

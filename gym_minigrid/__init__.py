@@ -1,6 +1,7 @@
 from gym.envs.registration import register
+from gym.envs.registration import EnvSpec
 
-from gym_minigrid.minigrid import Wall
+from gym_minigrid.minigrid_env import Wall
 
 
 def register_minigrid_envs():
@@ -147,10 +148,18 @@ def register_minigrid_envs():
 
     # Empty
     # ----------------------------------------
-
+    from gym_minigrid.envs.empty import EmptyEnv
+    empty_env_5x5 = EmptyEnv(size=5)
+    # empty_env_5x5_spec = EnvSpec("MiniGrid-Empty-5x5-v0",
+    #                              max_episode_steps=empty_env_5x5.max_steps,
+    #                              entry_point="gym_minigrid.envs:EmptyEnv",
+    #                              kwargs={"size": 5})
+    #
+    # register(empty_env_5x5_spec)
     register(
         id="MiniGrid-Empty-5x5-v0",
         entry_point="gym_minigrid.envs:EmptyEnv",
+        max_episode_steps=empty_env_5x5.max_steps,
         kwargs={"size": 5},
     )
 

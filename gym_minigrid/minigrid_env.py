@@ -7,6 +7,7 @@ from typing import Any, Callable, Optional, Union
 import gym
 import numpy as np
 from gym import spaces
+from gym.spaces.utils import flatten_space, flatten
 from gym.utils import seeding
 
 # Size in pixels of a tile in the full-scale human view
@@ -21,6 +22,7 @@ from gym_minigrid.rendering import (
     rotate_fn,
 )
 from gym_minigrid.window import Window
+
 
 TILE_PIXELS = 32
 
@@ -82,6 +84,64 @@ def check_if_no_duplicate(duplicate_list: list) -> bool:
     """Check if given list contains any duplicates"""
     return len(set(duplicate_list)) == len(duplicate_list)
 
+def get_minigrid_words():
+    colors = ["red", "green", "blue", "yellow", "purple", "grey"]
+    objects = [
+        "unseen",
+        "empty",
+        "wall",
+        "floor",
+        "box",
+        "key",
+        "ball",
+        "door",
+        "goal",
+        "agent",
+        "lava",
+    ]
+
+    verbs = [
+        "pick",
+        "avoid",
+        "get",
+        "find",
+        "put",
+        "use",
+        "open",
+        "go",
+        "fetch",
+        "reach",
+        "unlock",
+        "traverse",
+    ]
+
+    extra_words = [
+        "up",
+        "the",
+        "a",
+        "at",
+        ",",
+        "square",
+        "and",
+        "then",
+        "to",
+        "of",
+        "rooms",
+        "near",
+        "opening",
+        "must",
+        "you",
+        "matching",
+        "end",
+        "hallway",
+        "object",
+        "from",
+        "room",
+    ]
+
+    all_words = colors + objects + verbs + extra_words
+    assert len(all_words) == len(set(all_words))
+    return {word: i for i, word in enumerate(all_words)}
 
 class MissionSpace(spaces.Space[str]):
     r"""A space representing a mission for the Gym-Minigrid environments.
@@ -865,6 +925,16 @@ class MiniGridEnv(gym.Env):
 
         # Initialize mission
         self.mission = mission_space.sample()
+        self.mission_space = mission_space
+        # Added by AGC - to include functionatity to encode mission as part of base MiniGridEnv class
+        self.encode_mis = kwargs.get("encode_mission", True)
+        # Also added by AGC - to include funcionatlity to flatten obs space
+        self.flatten_obs = kwargs.get("flatten_obs", True)
+        if self.encode_mis:
+            self.word_dict = get_minigrid_words()
+            self.max_words_in_mission = kwargs.get('max_words_in_mission', 20)
+            self.mission_space = spaces.MultiDiscrete([len(self.word_dict)] * self.max_words_in_mission)
+
 
         # Can't set both grid_size and width/height
         if grid_size:
@@ -885,19 +955,27 @@ class MiniGridEnv(gym.Env):
 
         # Observations are dictionaries containing an
         # encoding of the grid and a textual 'mission' string
-        image_observation_space = spaces.Box(
+        self.image_observation_space = spaces.Box(
             low=0,
             high=255,
             shape=(self.agent_view_size, self.agent_view_size, 3),
             dtype="uint8",
         )
-        self.observation_space = spaces.Dict(
+        # we store observation_space_dict to use as an input for spaces.flatten in self.get_obs()
+        # we store this or the flattened observation space in self.observation_space for use as an external attribute
+        # if necessary
+        self.observation_space_dict = spaces.Dict(
             {
-                "image": image_observation_space,
+                "image": self.image_observation_space,
                 "direction": spaces.Discrete(4),
-                "mission": mission_space,
+                "mission": self.mission_space,
             }
         )
+        if self.flatten_obs:
+            assert self.encode_mis, "Flattening obs space only works if mission is encoded"
+            self.observation_space = flatten_space(self.observation_space_dict)
+        else:
+            self.observation_space = self.observation_space_dict
 
         # Range of possible rewards
         self.reward_range = (0, 1)
@@ -1091,6 +1169,30 @@ class MiniGridEnv(gym.Env):
             self.np_random.integers(xLow, xHigh),
             self.np_random.integers(yLow, yHigh),
         )
+
+    def _string_to_indices(self, string, offset=1):
+        """
+        Convert a string to a list of indices.
+        """
+        indices = []
+        # adding space before and after commas
+        string = string.replace(",", " , ")
+        for word in string.split():
+            if word in self.word_dict.keys():
+                indices.append(self.word_dict[word] + offset)
+            else:
+                raise ValueError(f"Unknown word: {word}")
+        return indices
+
+    def _encode_mission(self, mission_string):
+        if self.encode_mis:
+            encoding = self._string_to_indices(mission_string)
+            assert len(encoding) < self.max_words_in_mission
+            encoding += [0] * (self.max_words_in_mission - len(encoding))
+
+            return np.array(encoding, dtype=np.int64)
+        else:
+            return mission_string
 
     def place_obj(self, obj, top=None, size=None, reject_fn=None, max_tries=math.inf):
         """
@@ -1413,8 +1515,13 @@ class MiniGridEnv(gym.Env):
         # Observations are dictionaries containing:
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
-        # - a textual mission string (instructions for the agent)
-        obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
+        # - a textual mission string (instructions for the agent) - or one-hot encoding of the mission string
+        obs = {"image": image, "direction": self.agent_dir,
+               "mission": self._encode_mission(self.mission)}
+
+        if self.flatten_obs:
+            # flatten the observation if we need to
+            obs = flatten(self.observation_space_dict, obs)
 
         return obs
 

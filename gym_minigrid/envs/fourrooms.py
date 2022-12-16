@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import Goal, Grid, MiniGridEnv, MissionSpace
+from gym_minigrid.minigrid_env import Goal, Grid, MiniGridEnv, MissionSpace
 
 
 class FourRoomsEnv(MiniGridEnv):

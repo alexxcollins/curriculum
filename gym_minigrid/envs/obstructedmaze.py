@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import COLOR_NAMES, DIR_TO_VEC, Ball, Box, Key, MissionSpace
+from gym_minigrid.minigrid_env import COLOR_NAMES, DIR_TO_VEC, Ball, Box, Key, MissionSpace
 from gym_minigrid.roomgrid import RoomGrid
 
 

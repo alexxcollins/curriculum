@@ -1,6 +1,6 @@
 import numpy as np
 
-from gym_minigrid.minigrid import Ball, Grid, Key, MiniGridEnv, MissionSpace, Wall
+from gym_minigrid.minigrid_env import Ball, Grid, Key, MiniGridEnv, MissionSpace, Wall
 
 
 class MemoryEnv(MiniGridEnv):

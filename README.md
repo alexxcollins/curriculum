@@ -165,7 +165,7 @@ Actions in the basic environment:
 
 Default tile/observation encoding:
 - Each tile is encoded as a 3 dimensional tuple: `(OBJECT_IDX, COLOR_IDX, STATE)` 
-- `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in [gym_minigrid/minigrid.py](gym_minigrid/minigrid.py)
+- `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in [gym_minigrid/minigrid.py](gym_minigrid/minigrid_env.py)
 - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
 
 By default, sparse rewards are given for reaching a green goal tile. A
@@ -174,7 +174,7 @@ environment-specific time step limit for completing the task.
 You can define your own reward function by creating a class derived
 from `MiniGridEnv`. Extending the environment with new object types or new actions
 should be very easy. If you wish to do this, you should take a look at the
-[gym_minigrid/minigrid.py](gym_minigrid/minigrid.py) source file.
+[gym_minigrid/minigrid.py](gym_minigrid/minigrid_env.py) source file.
 
 ## Included Environments
 

@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import COLOR_NAMES, Ball, MissionSpace
+from gym_minigrid.minigrid_env import COLOR_NAMES, Ball, MissionSpace
 from gym_minigrid.roomgrid import RoomGrid
 
 

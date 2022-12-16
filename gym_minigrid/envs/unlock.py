@@ -1,4 +1,4 @@
-from gym_minigrid.minigrid import MissionSpace
+from gym_minigrid.minigrid_env import MissionSpace
 from gym_minigrid.roomgrid import RoomGrid
 
 

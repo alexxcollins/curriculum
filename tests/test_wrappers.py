@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from gym_minigrid.envs import EmptyEnv
-from gym_minigrid.minigrid import MiniGridEnv
+from gym_minigrid.minigrid_env import MiniGridEnv
 from gym_minigrid.wrappers import (
     ActionBonus,
     DictObservationSpaceWrapper,
