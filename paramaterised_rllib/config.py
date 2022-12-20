@@ -1,16 +1,36 @@
 # TODO: currently just storing configs as dict in this .py file.
 #       more elegant solutions available....
 
-from paramaterised_rllib.envs import EmptyEnvP
+from gym_minigrid.minigrid_env import COLOR_NAMES
+from paramaterised_rllib.envs import EmptyEnvP, FourRoomsEnvP, GoToObjectEnvP
 from paramaterised_rllib.trainers import DummyTrainer
 
 trainer_dict = {"DummyTrainer": DummyTrainer}
-envs_dict = {"EmptyEnvP": EmptyEnvP}
-env_config_defaults = {"EmptyEnvP": {"mission_space": "get to the green goal square",
-                                     "grid_size": 8,
-                                     "see_through_walls": True,
-                                     "agent_start_pos": (1, 1),
-                                     "agent_start_dir": 0}}
+envs_dict = {"EmptyP": EmptyEnvP,
+             "FourRoomsP": FourRoomsEnvP,
+             "GoToObjectP": GoToObjectEnvP
+             }
+env_config_defaults = {"EmptyP": {"mission_space": "reach the goal",
+                                  "grid_size": 8,
+                                  "see_through_walls": True,
+                                  "agent_pos": (1, 1),
+                                  "agent_start_dir": 0
+                                  },
+                       "FourRoomsP": {"mission_space": "get to the green goal square",
+                                      "agent_pos": None,
+                                      "goal_pos": None,
+                                      "grid_size": 19,  # this is hard coded in mini_grid.envs.fourrooms
+                                      "see_through_walls": False,
+                                      "max_steps": 100 # this is hard coded in mini_grid.envs.fourrooms
+                                      },
+                       "GoToObjectP": {"mission_space": "go to the green ball",
+                                       "num_objs": 2,
+                                       "grid_size": 6,
+                                       "see_through_walls": True, # this is hard coded in mini_grid.envs.gotoobject
+                                       "obj_types": ["key", "ball", "box"],
+                                       "color_names": COLOR_NAMES,
+                                       }
+                       }
 
 
 def get_minigrid_words():

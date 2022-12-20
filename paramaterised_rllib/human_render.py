@@ -8,8 +8,6 @@ from gym_minigrid.minigrid_env import MiniGridEnv, MissionSpace
 
 from paramaterised_rllib.config import trainer_dict, envs_dict, env_config_defaults
 
-# TODO: these are config type files. They COULD live in a config file
-
 class EnvRender:
     def __init__(self, Env: MiniGridEnv, Trainer, env_config, window_name: str = "gym_minigrid"):
         self.env = Env(env_config)
@@ -31,7 +29,7 @@ class EnvRender:
         return obs
 
     def step(self, action):
-        obs, reward, done, _ = self.env.step(action)
+        obs, reward, done, info = self.env.step(action)
         print(f"step={self.env.step_count}, reward={reward:.2f}")
 
         if done:
@@ -40,7 +38,7 @@ class EnvRender:
         else:
             self.redraw(obs, self.env)
 
-        return obs, reward, done, _
+        return obs, reward, done, info
 
     def run_one_episode(self):
         """Train an agent for one episode.
@@ -65,17 +63,22 @@ class EnvRender:
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", help="class name of environment to load", type=str, default="EmptyEnvP")
+    parser.add_argument("--env", help="class name of environment to load", type=str, default="EmptyP")
     parser.add_argument("--trainer", help="class name of trainer to load", type=str, default="DummyTrainer")
     parser.add_argument("--grid_size", help="environment size", type=int, default=None)
     parser.add_argument("--width", help="environment width", type=int, default=None)
     parser.add_argument("--height", help="environment height", type=int, default=None)
-    parser.add_argument("--max_steps", help="maximum number of steps per episode", type=int, default=1000)
-    # parser.add_argument("--see_through_walls", help="can agent see through walls", type=bool, default=False)
+    parser.add_argument("--agent_pos", help="start position of the agent", type=tuple, default=None)
+    parser.add_argument("--max_steps", help="maximum number of steps per episode", type=int, default=None)
+    parser.add_argument("--see_through_walls", help="can agent see through walls", type=bool, default=None)
     parser.add_argument("--agent_view_size", help="agent view size", type=int, default=7)
     parser.add_argument("--highlight", help="", type=bool, default=True)
     parser.add_argument("--tile_size", help="size of each tile in pixels", type=int, default=32)
     parser.add_argument("--mission_space", help="mission string", type=str, default=None)
+    parser.add_argument("--num_objs", help="number of objects in environment",
+                        type=int, default=None)
+    parser.add_argument("--obj_types", help="list of object types", type=list, default=None)
+    parser.add_argument("--color_names", help="list of color names", type=list, default=None)
 
     args = parser.parse_args()
 
@@ -100,6 +103,7 @@ if __name__ == "__main__":
             env_config[key] = env_config_defaults[env_name].pop(key, None)
         else:
             env_config[key] = val
+            _ = env_config_defaults[env_name].pop(key, None) # we need to do this to avoid the config default over-riding the named arg
     # now add all key value pairs left in env_config_defaults to env_config
     env_config.update(env_config_defaults[env_name])
 
