@@ -9,9 +9,9 @@ from gym_minigrid.minigrid_env import MiniGridEnv, MissionSpace
 from paramaterised_rllib.config import trainer_dict, envs_dict, env_config_defaults
 
 class EnvRender:
-    def __init__(self, Env: MiniGridEnv, Trainer, env_config, window_name: str = "gym_minigrid"):
+    def __init__(self, Env: MiniGridEnv, trainer, env_config, window_name: str = "gym_minigrid"):
         self.env = Env(env_config)
-        self.trainer = Trainer()
+        self.trainer = trainer
         self.max_steps = 1000
         self.window = Window(window_name)
 
@@ -52,7 +52,7 @@ class EnvRender:
         obs = self.reset()
 
         while not done:
-            action = self.trainer.compute_action(env=self.env, agent_obs=obs)
+            action = self.trainer.compute_single_action(obs)
             obs, reward, done, _ = self.step(action)
             episode_reward += reward
             episode += 1
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     args_dict = vars(args)
     env_name = args_dict.pop("env")
     Env = envs_dict[env_name]
-    Trainer = trainer_dict[args_dict.pop("trainer")]
+    trainer = trainer_dict[args_dict.pop("trainer")]()
 
     # start building env_config to pass into Env classe
     mission_string = args_dict.pop('mission_space', None)

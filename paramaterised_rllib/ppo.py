@@ -1,6 +1,7 @@
 import argparse
 import os
 from datetime import datetime as dt
+import pickle
 import sys
 sys.path.insert(0, "./")
 
@@ -89,7 +90,8 @@ def ppo_train(Env: MiniGridEnv, env_config: EnvContext, training_config: PPOConf
             run,
             param_space=ppo_config.to_dict(),
             run_config=air.RunConfig(stop=stop,
-                                     local_dir="../results",
+                                     # Tddo - directory needs to be relative to project folder not to folder script is run from
+                                     local_dir="./results",
                                      name=f"test_experiment_{dt.now().strftime('%Y-%m-%d_%H-%M-%S')}"
                                      )
         )
@@ -98,6 +100,10 @@ def ppo_train(Env: MiniGridEnv, env_config: EnvContext, training_config: PPOConf
         if as_test:
             print("Checking if learning goals were achieved")
             check_learning_achieved(results, stop_reward)
+
+        print(results.get_best_result("mean_reward", mode="max").checkpoint)
+
+
 
     ray.shutdown()
 
@@ -108,7 +114,7 @@ if __name__ == "__main__":
     parser.add_argument("--no_tune", type=bool, default=False)
     parser.add_argument("--as_test", type=bool, default=True)
     parser.add_argument("--stop_iters", type=int, default=50)
-    parser.add_argument("--stop_timesteps", type=int, default=100000)
+    parser.add_argument("--stop_timesteps", type=int, default=200000)
     parser.add_argument("--stop_reward", type=float, default=0.5)
     parser.add_argument("--env", help="class name of environment to load",
                         type=str, default="GoToObjectP")
@@ -162,5 +168,7 @@ if __name__ == "__main__":
     # now add all key value pairs left in env_config_defaults to env_config
     _ = 1
     env_config.update(env_config_defaults[env_name])
+
+    # save env_config and training_config to json files
 
     ppo_train(Env, env_config, training_config)
