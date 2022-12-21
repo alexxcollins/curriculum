@@ -8,6 +8,8 @@ dependencies, making it less likely to break or fail to install. It loads no
 external sprites/textures, and it can run at up to 5000 FPS on a Core i7
 laptop, which means you can run your experiments faster. 
 
+The code in the `gym_minigrid` folder is almost a carbon copy of the Minigrid project (v1.1.0) (Chevalier-Boisvert, M., Willems, L. and Pal, S., 2018). The only file I've modified is minigrid_env.py. 
+
 Ray and the RLlib library provide complete implementations of popular RL algorithms, allow effortless scaling from laptop to cloud and provide efficient hyperparameter tuning with a variety of search methods.
 
 Compatibility between [OpenAI Gym](https://github.com/openai/gym), Minigrid and Ray[RLlib] is difficult, particulary if you want to generate many parameterised MiniGrid Environments to use as part of a curriculum. This repo will help take the pain out of setting up with Google Cloud (GCP), including $300 of credits which get you a long way into your first experiments, and managing the dependencies between Ray and Minigrid. It has forked MiniGrid and modified the base MiniGridEnv class as well as written a lean subclass of all the MiniGridEnvs (so the MiniGrid EmptyEnv is called EmptyEnvP in this library). You can pass these Env classes into a ray AlgorithmConfig object along with an env_config dictionary to algorithmically define your environments on the fly or as part of an environment buffer.
