@@ -5,9 +5,9 @@ sys.path.insert(0, "trainers/")
 from ray.rllib.algorithms.algorithm import Algorithm
 
 from gym_minigrid.minigrid_env import MiniGridEnv
-from paramaterised_rllib.config import envs_dict
-from paramaterised_rllib.human_render import EnvRender
-from paramaterised_rllib.envs import GoToObjectEnvP
+from parameterised_rllib.config import envs_dict
+from parameterised_rllib.human_render import EnvRender
+from parameterised_rllib.envs import GoToObjectEnvP
 
 def evaluate_algo(checkpoint_path: str, Env: MiniGridEnv,
                   render: bool = False):

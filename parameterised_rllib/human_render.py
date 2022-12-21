@@ -6,7 +6,7 @@ sys.path.insert(0, "./")
 from gym_minigrid.window import Window
 from gym_minigrid.minigrid_env import MiniGridEnv, MissionSpace
 
-from paramaterised_rllib.config import trainer_dict, envs_dict, env_config_defaults
+from parameterised_rllib.config import trainer_dict, envs_dict, env_config_defaults
 
 class EnvRender:
     def __init__(self, Env: MiniGridEnv, trainer, env_config, window_name: str = "gym_minigrid"):

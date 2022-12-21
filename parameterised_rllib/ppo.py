@@ -31,7 +31,7 @@ def ppo_train(Env: MiniGridEnv, env_config: EnvContext, training_config: PPOConf
     # Todo: finish re-writing this function from here
     #       #########################################
     # create environment
-    # env = Env(env_config)
+    env = Env(env_config)
     # obs = env.reset()
 
     # Check we do not have any environment errors

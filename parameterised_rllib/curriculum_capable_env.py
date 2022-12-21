@@ -10,7 +10,7 @@ from ray.rllib.env.apis.task_settable_env import TaskSettableEnv
 from ray.rllib.env.env_context import EnvContext
 from ray.rllib.utils.annotations import override
 
-from paramaterised_rllib.envs import GoToObjectEnvP
+from parameterised_rllib.envs import GoToObjectEnvP
 
 env_config = {"start_level": 1,
               "mission_space": "go to the green ball",

@@ -2,8 +2,8 @@
 #       more elegant solutions available....
 
 from gym_minigrid.minigrid_env import COLOR_NAMES
-from paramaterised_rllib.envs import EmptyEnvP, FourRoomsEnvP, GoToObjectEnvP
-from paramaterised_rllib.trainers import DummyTrainer
+from parameterised_rllib.envs import EmptyEnvP, FourRoomsEnvP, GoToObjectEnvP
+from parameterised_rllib.trainers import DummyTrainer
 
 trainer_dict = {"DummyTrainer": DummyTrainer}
 envs_dict = {"EmptyP": EmptyEnvP,
