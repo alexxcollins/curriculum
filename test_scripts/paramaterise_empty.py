@@ -53,7 +53,7 @@ def run_one_episode(env, trainer):
     obs = reset(env)
 
     while not done:
-        action = trainer.compute_action(obs)
+        action = trainer.compute_single_action(obs)
         obs, reward, done, _ = step(env, action)
         episode_reward += reward
         episode += 1

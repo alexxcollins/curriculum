@@ -11,26 +11,22 @@ with open("README.md") as fh:
         else:
             break
 
-# pytest is pinned to 7.0.1 as this is last version for python 3.6
-extras = {"testing": ["pytest==7.0.1"]}
-
 setup(
     name="gym_minigrid",
-    author="Farama Foundation",
-    author_email="jkterry@farama.org",
+    author="Alex Collins forked from Farama Foundation",
+    author_email="tbc",
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
     ],
-    version="1.1.0",
+    version="0.1",
     keywords="memory, environment, agent, rl, gym",
-    url="https://github.com/Farama-Foundation/gym-minigrid",
-    description="Minimalistic gridworld reinforcement learning environments",
-    extras_require=extras,
+    url="https://github.com/alexxcollins/curriculum.git",
+    description="Paramaterised gridworld reinforcement learning environments for rllib and cloud",
     packages=["gym_minigrid", "gym_minigrid.envs"],
     entry_points={
         "gym.envs": ["__root__ = gym_minigrid.__init__:register_minigrid_envs"]
@@ -43,5 +39,4 @@ setup(
         "matplotlib>=3.0",
     ],
     python_requires=">=3.7",
-    tests_require=extras["testing"],
 )
