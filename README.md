@@ -24,6 +24,10 @@ The provided environment yaml files take all the pain away from dependency manag
 conda create -n minigrid python=3.8
 conda activate minigrid
 conda env update --file environment_deb.yml # use m1 for mac
+git clone https://github.com/alexxcollins/curriculum.git
+cd gym_minigrid
+pip install -e .
+cd ..
 ```
 
 For Mac users with Arm64 architecture (M1 or M2 chips), it is highly advisable to do the following:
